@@ -1,8 +1,10 @@
 /*-------------------------------------------------------------------------
- *    FieldHints version 1.1
+ *    HTML5-compatible FieldHints
+ *    
+ *    Modified from FieldHints version 1.1
  *    http://pauldowman.com/projects/fieldhints
  *
- *    Copyright 2007 Paul Dowman, http://pauldowman.com/
+ *    Copyright 2010 Keith Platfoot
  *
  *    FieldHints is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -26,28 +28,26 @@
 
 
 var FieldHints = {
-    
-    fieldWithHintClass: 'fieldWithHint',
-    labelClass: 'hintText',
+  
+    fieldWithHintClass: 'fieldHint',
 
     initialize: function() {
-        var labels = $$('label.hintText');
+        // If browser supports HTML5, we don't need to do anything
+        if ('placeholder' in document.createElement("input")) {
+            return;
+        }
+        
+        var inputs = $$('input[placeholder]');
         var f = FieldHints.initializeField.bind(FieldHints);
-        labels.each(f);
+        inputs.each(f);
     },
     
     // Registers a blur handler and a focus handler for the field, and adds a
     // submit handler to a chain of submit handlers for the form.
-    initializeField: function(label) {
-        var fieldId = label.htmlFor;
-        if (!fieldId) return;
-
-        var field = $(fieldId);
-        if (!field) return;
-            
+    initializeField: function(field) {
         if (!field.fieldHintsInitialized) {
             field.fieldHintsInitialized = true;
-            var hint = label.innerHTML.strip();
+            var hint = field.getAttribute('placeholder');
             var form = field.form;
             
             this.addFocusHandler(field, hint);
