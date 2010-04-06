@@ -37,7 +37,7 @@ var FieldHints = {
             return;
         }
         
-        var inputs = $$('input[placeholder]');
+        var inputs = $$('input[placeholder]').concat($$('textarea[placeholder]'));
         var f = FieldHints.initializeField.bind(FieldHints);
         inputs.each(f);
     },
